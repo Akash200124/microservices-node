@@ -30,8 +30,9 @@ const createComment = async (req, res) => {
 const getCommentById = async (req, res) => {
 
     const id = req.params.id
-    console.log(id)
-    return res.status(200).json(comments [id] || [])
+    console.log("id", id)
+    console.log("comments", comments[id])
+    return res.status(200).json(comments || [])
 }
 
 

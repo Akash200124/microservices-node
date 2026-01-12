@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import CreateComment from './CreateComment'
 
 
 export default function CreateSnippet() {
@@ -67,7 +68,9 @@ export default function CreateSnippet() {
                 {Object?.values(snippets).map((snippet, index) => (
                     <div key={snippet.id || index} className="p-3 border rounded">
                         <h1 className="font-bold text-xl">{snippet.title}</h1>
+                        <CreateComment snippetid={snippet.id}/>
                     </div>
+                    
                 ))}
             </div>
 
