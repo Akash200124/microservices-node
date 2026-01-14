@@ -9,6 +9,20 @@ export default function CreateSnippet() {
     const [code, setCode] = useState('')
     const [snippets, setSnippets] = useState({})
 
+
+    const fetchSnippet = async () => {
+        try {
+            const res = await axios.get(
+                'http://localhost:8000/api/v1/snippet/get'
+            );
+
+            console.log(res.data);
+            setSnippets(res.data);
+
+        } catch (error) {
+            console.log("error in getting the snippets", error);
+        }
+    };
     const CreateSnippet = async (e) => {
         e.preventDefault()
         try {
@@ -18,24 +32,15 @@ export default function CreateSnippet() {
             })
 
             console.log("api res", res)
+            setTitle('')
+            setCode('')
+            fetchSnippet();
         } catch (error) {
             console.log(error)
         }
     }
+
     useEffect(() => {
-        const fetchSnippet = async () => {
-            try {
-                const res = await axios.get(
-                    'http://localhost:8000/api/v1/snippet/get'
-                );
-
-                console.log(res.data);
-                setSnippets(res.data);
-            } catch (error) {
-                console.log("error in getting the snippets", error);
-            }
-        };
-
         fetchSnippet();
     }, []);
 
@@ -68,9 +73,10 @@ export default function CreateSnippet() {
                 {Object?.values(snippets).map((snippet, index) => (
                     <div key={snippet.id || index} className="p-3 border rounded">
                         <h1 className="font-bold text-xl">{snippet.title}</h1>
-                        <CreateComment snippetid={snippet.id}/>
+                        <CreateComment snippetid={snippet.id} />
+                        
                     </div>
-                    
+
                 ))}
             </div>
 

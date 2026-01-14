@@ -21,36 +21,57 @@ export default function CreateComment({ snippetid }) {
         const fetchComments = async () => {
             try {
                 console.log("snippetid", snippetid)
-                const res = axios.get(`http://localhost:8001/api/v1/comment/${snippetid}/get`)
-                setComments(res?.data)
+                const res = await axios.get(`http://localhost:8001/api/v1/comment/${snippetid}/get`)
+                setComments(res.data?.[snippetid] || []);
                 console.log("comments >>> ", res?.data)
 
             } catch (error) {
                 console.log("error getting comments", error);
             }
         }
-        fetchComments()
-    }, [])
+        if (snippetid) fetchComments();
+
+    }, [snippetid]);
+
     return (
-        <div className='flex items-center gap-2 flex-row mt-2 '>
-            <form onSubmit={addcomment}>
+        <div className="mt-4 space-y-3 ">
+            {/* Add Comment */}
+            <form
+                onSubmit={addcomment}
+                className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg border "
+            >
                 <input
                     type="text"
                     name="comment"
-                    id="comment"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    placeholder='Add comments '
-                    className='border-2 border-gray-200 rounded-md p-2 '
+                    placeholder="Write a comment..."
+                    className="flex-1 bg-white border border-gray-300 rounded-md px-3  py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
                 />
-                <button className='bg-black text-white p-2 rounded-md ml-2 '>Add</button>
+                <button
+                    type="submit"
+                    className="bg-black text-white px-4  py-2 rounded-md text-sm hover:bg-gray-800 transition"
+                >
+                    Add
+                </button>
             </form>
 
-            <div>
-                {comments?.map((comment) => (
-                    <p key={comment._id}>{comment.text}</p>
-                ))}
+            {/* Comment List */}
+            <div className="space-y-2">
+                {comments.length === 0 ? (
+                    <p className="text-gray-400 text-sm">No comments yet</p>
+                ) : (
+                    comments.map((comment) => (
+                        <div
+                            key={comment.id}
+                            className="bg-white border rounded-lg px-3 py-2 text-sm shadow-sm"
+                        >
+                            {comment.text}
+                        </div>
+                    ))
+                )}
             </div>
         </div>
+
     )
 }
